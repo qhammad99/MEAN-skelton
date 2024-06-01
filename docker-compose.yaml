@@ -50,7 +50,7 @@ services:
       - |
         mkdir -p /app
         cd /app
-        npm install --legacy-peer-deps
+        npm install
         npm start
     ports:
       - "7200:4200"
