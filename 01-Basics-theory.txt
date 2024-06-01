@@ -1,0 +1,24 @@
+Angular learning (Basics)
+1.  Basic Fundamentals
+2.  Components
+3.  Data Binding & types
+4.  Directives & types
+5.  component communication
+6.  services
+7.  routing
+8.  observables
+9.  forms
+10. pipes
+11. http
+12. authentication
+
+1.  Basics Fundamentals
+	- what is angular?
+	   it is opensource javascript framework, developed by google.
+	   It is used for single page applications.
+        - why use framework?
+           code maintenance, well structured code in modules,
+           reusability
+        - benefits of angular over libraries
+            cli (create component and services usig cli), 
+            two way binding (binding html with component)
