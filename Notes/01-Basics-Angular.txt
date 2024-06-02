@@ -1,0 +1,217 @@
+###############################################################################
+#                        Angular learning (Basics)                            #
+###############################################################################
+
+------------------------ TABLE OF CONTENTS ------------------------------------
+1.  Basic Fundamentals
+2.  Components
+3.  Data Binding & types
+4.  Directives & types
+5.  Components Communication
+6.  Services
+7.  Templates refrence
+8.  Lifecycle hooks
+9.  Routing
+10. Forms
+11. HTTP
+12. Pipes
+
+------------------------------------------------------------------------------
+1.  Basics Fundamentals
+	1.1. what is angular?
+	   it is opensource javascript framework, developed by google.
+	   It is used for single page applications.
+        - why use framework?
+           code maintenance, well structured code in modules,
+           reusability
+        - benefits of angular over libraries
+            cli (create component and services usig cli), 
+            two way binding (binding html with component)
+   1.2. how angular load the app?
+      It load the src/index.html to browser but from content displayed?
+      Angular looked for starting point in angular.json => src/main.ts/
+      => appModule(as angular forced to use standalone components, so no module in it)
+      => app.component... => template url to get html and display it in browser.
+
+------------------------------------------------------------------------------
+2. Components
+   Each component has 4 files
+      2.1. .html <view or template>
+      2.2. .css/.scss <stylesheet>
+      2.3. .spec.ts <unit-test>
+      2.4. .ts <model or main class>
+            in .ts have directive @Component...
+            you can generate a new component using `ng g c <componet-name>`
+
+------------------------------------------------------------------------------
+3. Bindings
+   Bindings mean binding or sharing data between mode and view. There are four bindings.
+   3.1. String Interpolation ( ts to HTML ) we use {{ variable }}
+   3.2. Property Binding (ts to HTML) we use [property]="variable"
+   3.3. Event Binding (HTML to ts) we use (input)="function_name($event)"
+   3.4. TwoWay Binding (both side) we can use property and event mixture...
+        but angular provide us ngModel directive for it from FormModule
+        [(ngModel)]="variable"  it will change variable and show variable at same time.
+
+------------------------------------------------------------------------------
+4. Directives
+   Directives are special word which when angular see in DOM.. 
+   it knows it has to change something there
+   4.1. Component Directive
+        comonent directive use templates..will add html & js in place of selector
+   4.2. Structural Directives - modify DOM
+        - @for, @if, @switch (control flow)
+        - we can't use two structural directives in same tag.
+   4.3. Attribute Directives - modify properties of DOM
+        - [ngClass]="{
+            'yello-color': #apply left side class if that (right) side is true, we can use if else,
+            'blue-color': #also we can use multiple classes..
+        }",
+        - ngStyle also same but it will apply specific css properties.
+
+------------------------------------------------------------------------------
+5. Components Communication
+   5.1. Parent to Child
+        We have to define @Input() variable_name inside child..
+        and from parent we will pass it like that.
+        <child [variable_name]="varaible_in_parent">
+   5.2. Child to Parent
+        child will have an event emitter and it will emit it.
+        define emitter using @Output() in child..
+        and recieve that event in parent.
+        as we recieve any other emit e.g: click event in buttons.
+   If we have to talk components which has very far relation we will use services for them.
+
+------------------------------------------------------------------------------
+6. Services
+   services can be used for reuse of code or for communication..
+   create a new service using `ng g s <service-name>`
+   when he have to call a service we not have to create a instance of service.
+   (new instance using new instance of class)
+   instead we will use Dependency injection.
+   Dependency Injection:
+      In Dependency injection we just add refrence in constructor. so angular
+      know that, this component is dependent on following dependency and
+      it will create instance of service itself.
+   so that service instance is created once for a full app.
+
+------------------------------------------------------------------------------
+7. Templates refrence (Local refrence Variables)
+   We can create template for any element or tag in html using # as first char
+   But it will create its refrence in html.. to access it in ts we have to use
+   ViewChild decorator...we can access DOM of element through event based binding
+   e.g: create refrence and pass that refrence instead of $event to ts.
+   one more example,, we have to disable button until input text length > 0.
+   so we can declare refrence in input and in button [disabled]="refer.value.length==0"
+   but sometimes we need access without any event. so here ViewChild helps.
+   
+   @ViewChild('refer', {static: true}) myElement;
+   It will be accessibe iniside ngOnInit lifecycly hook..
+   but it will be a refrence of an element.. to access value we have to use
+   myElement.nativeElement.<attribute> which we wanna see.
+
+------------------------------------------------------------------------------
+8. Lifecycle hooks
+   Both component & directive have lifecycle hooks, but components have some more.
+   components lifecycle hooks are 8.
+   8.1. ngOnInit   
+        => when component initiazlize, called once after first ngOnChanges, after constructor.
+   8.2. ngOnChanges  
+        => called once before onInit and called whenever data-bound (@Input) change.
+        => no call if no @Input,,,
+        => we can also get SimpleChange type argument in it,, from which we can get previous value.
+   8.3. ngDoCheck
+        => run after very change detection
+        => run immediately after ngOnChanges on change detection
+        => and at first immediately after ngOnInit
+   8.4. ngAfterContentInit
+        => called once after first DoCheck
+        => e.g: if we pass some html element in child component tag..and we create refrence variable of it.
+           in child we need to create @ContentChile("refrence_variable_name")
+           then that element will be accessible in just that lifecycle hook.
+   8.5. ngAfterContentChecked
+        => at first will be called after after content in it.
+        => after that will be called after every do check.
+   8.6. ngAfterViewInit
+        => will be called once after first after content checked.
+   8.7. ngAfterViewChecked
+        => will be called once after first after view init.
+        => and after every after content check.
+   8.8. ngOnDestroy   => called once just before removing from DOM. important to destroy intervals we started any in it.
+
+------------------------------------------------------------------------------
+9. Routing
+   => We can define routes in routes array in routing component.
+      {path: "", component: Component}
+   => To use these routes we have to use `<router-outlet>`
+   => we can also navigate to routes through button without refresh using routerLink="/path"
+   => we can also add active directive using routerLinkActive="active", so we can
+      assign css class to that button using <btn-tag or a-tag>.active
+   => We can also use redirect to in route. pathMatch: 'full' is necessary
+      e.g: {path: '', redirectTo: 'path', pathMatch: 'full'}
+   => Programatic Routing through function:
+      - declare router:Router in constructor.
+      - this.router.navigate(['path'])
+   => 404 route, add it as last route
+      {path: '**', component: Component}
+   => params in route
+      {path: 'path:id', component: Component}
+      to get the param, create ActivatedRoute object
+      and in ngOnInit
+      this.route.snapshot.params['id']
+
+   => some advance topics for routing are
+      child route, relative & absolute path, queryParams,
+      Fragments, subscribe to route events, routeGuards
+
+------------------------------------------------------------------------------
+10. Forms
+    10.1 Template Driven Forms (simple forms)
+         => easy create normal form, and inputs
+         => in inputs must have name attribute set, then add ngModel (nobrackets)
+         => and for form use twodirective
+            - #form="ngForm" 
+            - (ngSubmit)="some_function(form)"
+         => validation will be normal html attributes
+            e.g required....etc
+            it will turn form status to not valid
+            - also we can disable submit btn by form.valid check
+         => error messages or styles for not valid
+            angular provide some classes,, from which we can verify that field is valid or not..
+            we can also make refrence by assigning ngModel directive myField="ngModel"
+            and then in error message check conditions if myField.valid
+         => we can also pass default values to fields,,where we specified ngModel alone,,
+            [ngModel]="default_value"
+         => to reset create ViewChild for form,, and use form.reset(),, it will set default values.
+
+    10.2 Reactive Forms (Model Driven) (complex forms)
+         => First create form group with fields as form control in ts file...
+            declaration: form:FormGroup
+            define in ngOnInit: form = new FormGroup({
+               field_1: new FormControl('default_value', Validators.required),
+               field_2: new FormControl(null, [Validators.required, Validators.email])
+            }) 
+         => in template for form use [formGroup]="form"
+         => for fields use formControlName="control_name"
+         => to check fields are valid or not we have to use form.get('field_1').valid
+         => we can use setValue function to change all values
+         => patchValue to change which we want just
+
+------------------------------------------------------------------------------
+11. HTTP (API calls)
+    => HTTP client module will be used
+    => It will return Observable(array like getting values in stream).
+    => to get data we need to subscribe to observable.
+    => in subscribe three callbacks,, success, error & completion.
+       e.g:
+       this.http.get(<some_url).subscribe((res)=>{
+         console.log("success");
+       }, (err)=>{   
+         console.log("error");
+       }, ()=>{   
+         console.log("completed");
+       });
+
+
+------------------------------------------------------------------------------
+12. Pipes
