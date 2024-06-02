@@ -212,6 +212,14 @@
          console.log("completed");
        });
 
-
 ------------------------------------------------------------------------------
 12. Pipes
+   modify data for display
+    => built in Pipes
+       e.g: {{ value | date }} or {{ value | date: 'MM-dd-yyyy'}}
+    => custom Pipes
+       create using `ng g p <pipe_name>`
+       we will get value in first argument value inside transform function..
+       and we write according to requirements.
+
+################################## THE END ###################################
